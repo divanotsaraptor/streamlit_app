@@ -19,7 +19,7 @@ st.subheader("Введите параметры квартиры для пред
 
 lat = st.number_input('What is the latitude of your flat?', 37.0, 38.0, step=1e-6, format="%.6f")
 lon = st.number_input('What is the longitude of your flat?', 55.0, 56.0, step=1e-6, format="%.6f")
-total_square = st.number_input('What is the square of your flat?', 0, 1000)
+total_square = st.number_input('What is the square of your flat?', 1, 1000, step=0.1, format="%.1f")
 rooms = st.sidebar.selectbox('How many rooms in your flat?', list(range(1, 17)))
 floor = st.number_input('What is the floor of your flat?', 0, 99)
 city = st.sidebar.selectbox("Where is your flat? (select city)", city_df['city_cat'])
@@ -29,13 +29,13 @@ district = st.sidebar.selectbox("Which district is your flat in?", district_df['
 if st.button("Predict Price"):
     # Создание входного DataFrame
     input_df = pd.DataFrame({
-        'latitude': [lat],
-        'longitude': [lon],
+        'lat': [lat],
+        'lon': [lon],
         'total_square': [total_square],
         'rooms': [rooms],
         'floor': [floor],
-        'city': [city],
-        'district': [district]
+        'city_cat': [city],
+        'district_cat': [district]
     }, index=[0])
 
     # Загрузка модели (выполняется только при нажатии кнопки)
@@ -48,8 +48,8 @@ if st.button("Predict Price"):
         predicted_price = round(prediction[0])
 
         # Визуализация результата
-        st.success("Prediction completed successfully!")
-        st.write("### Results")
+        st.success("Оценка завершена")
+        st.write("Результаты:")
         col1, col2 = st.columns(2)
         with col1:
             st.metric("Latitude", f"{lat:.6f}")
